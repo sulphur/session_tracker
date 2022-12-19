@@ -17,7 +17,7 @@ defmodule SessionTrackerWeb.Plugs.Session do
         new_cookie_uuid = Ecto.UUID.generate()
         user_agent = get_user_agent_name(conn)
 
-        {:ok, sesison} =
+        {:ok, session} =
           Sessions.create_tracking_session(%{
             cookie_uuid: new_cookie_uuid,
             browser_agent: user_agent
@@ -25,7 +25,7 @@ defmodule SessionTrackerWeb.Plugs.Session do
 
         conn
         |> put_resp_cookie(@cookie_name, new_cookie_uuid, max_age: 30*24*60*60, signed: true)
-        |> assign(current_session: session)
+        |> assign(:current_session, session)
     end
   end
 
