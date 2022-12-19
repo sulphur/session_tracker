@@ -21,10 +21,12 @@ defmodule SessionTrackerWeb.Router do
     get "/", PageController, :home
 
 
-    live "/page_a", PageALive.Index, :index
-    live "/page_b", PageBLive.Index, :index
-    live "/page_c", PageCLive.Index, :index
-    live "/page_c/:tab", PageCLive.Show, :show
+    live_session :default, on_mount: SessionTrackerWeb.InitSession do
+      live "/page_a", PageALive.Index, :index
+      live "/page_b", PageBLive.Index, :index
+      live "/page_c", PageCLive.Index, :index
+      live "/page_c/:tab", PageCLive.Show, :show
+    end
 
   end
 

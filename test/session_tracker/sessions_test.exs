@@ -58,4 +58,62 @@ defmodule SessionTracker.SessionsTest do
       assert %Ecto.Changeset{} = Sessions.change_tracking_session(tracking_session)
     end
   end
+
+  describe "page_views" do
+    alias SessionTracker.Sessions.PageView
+
+    import SessionTracker.SessionsFixtures
+
+    @invalid_attrs %{additional_identity_information: nil, engagement_time: nil, module_name: nil}
+
+    test "list_page_views/0 returns all page_views" do
+      page_view = page_view_fixture()
+      assert Sessions.list_page_views() == [page_view]
+    end
+
+    test "get_page_view!/1 returns the page_view with given id" do
+      page_view = page_view_fixture()
+      assert Sessions.get_page_view!(page_view.id) == page_view
+    end
+
+    test "create_page_view/1 with valid data creates a page_view" do
+      valid_attrs = %{additional_identity_information: %{}, engagement_time: 42, module_name: "some module_name"}
+
+      assert {:ok, %PageView{} = page_view} = Sessions.create_page_view(valid_attrs)
+      assert page_view.additional_identity_information == %{}
+      assert page_view.engagement_time == 42
+      assert page_view.module_name == "some module_name"
+    end
+
+    test "create_page_view/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Sessions.create_page_view(@invalid_attrs)
+    end
+
+    test "update_page_view/2 with valid data updates the page_view" do
+      page_view = page_view_fixture()
+      update_attrs = %{additional_identity_information: %{}, engagement_time: 43, module_name: "some updated module_name"}
+
+      assert {:ok, %PageView{} = page_view} = Sessions.update_page_view(page_view, update_attrs)
+      assert page_view.additional_identity_information == %{}
+      assert page_view.engagement_time == 43
+      assert page_view.module_name == "some updated module_name"
+    end
+
+    test "update_page_view/2 with invalid data returns error changeset" do
+      page_view = page_view_fixture()
+      assert {:error, %Ecto.Changeset{}} = Sessions.update_page_view(page_view, @invalid_attrs)
+      assert page_view == Sessions.get_page_view!(page_view.id)
+    end
+
+    test "delete_page_view/1 deletes the page_view" do
+      page_view = page_view_fixture()
+      assert {:ok, %PageView{}} = Sessions.delete_page_view(page_view)
+      assert_raise Ecto.NoResultsError, fn -> Sessions.get_page_view!(page_view.id) end
+    end
+
+    test "change_page_view/1 returns a page_view changeset" do
+      page_view = page_view_fixture()
+      assert %Ecto.Changeset{} = Sessions.change_page_view(page_view)
+    end
+  end
 end

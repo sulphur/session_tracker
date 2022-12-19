@@ -56,6 +56,17 @@ defmodule SessionTrackerWeb do
         layout: {SessionTrackerWeb.Layouts, :app}
 
       unquote(html_helpers())
+
+      def handle_event("page_loaded", params, socket) do
+        {:ok, page_view} =
+          SessionTrackerWeb.PageViewTracker.track_page(socket, params)
+        {:noreply, assign(socket, :current_page_view, page_view)}
+      end
+
+      def handle_event("update_pageview", params, socket) do
+        SessionTrackerWeb.PageViewTracker.update_page_view(socket.assigns.current_page_view, params)
+        {:noreply, socket}
+      end
     end
   end
 

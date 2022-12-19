@@ -15,6 +15,7 @@ defmodule SessionTrackerWeb.Plugs.Session do
     |> put_resp_cookie(@cookie_name, session.cookie_uuid, max_age: 30*24*60*60, signed: true)
     |> assign(:current_session, session)
     |> assign(:current_session_id, session.id)
+    |> put_session(:current_session_id, session.id)
   end
 
   defp find_or_create_session(conn, %{@cookie_name => cookie_val}) do

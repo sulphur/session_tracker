@@ -18,4 +18,20 @@ defmodule SessionTracker.SessionsFixtures do
 
     tracking_session
   end
+
+  @doc """
+  Generate a page_view.
+  """
+  def page_view_fixture(attrs \\ %{}) do
+    {:ok, page_view} =
+      attrs
+      |> Enum.into(%{
+        additional_identity_information: %{},
+        engagement_time: 42,
+        module_name: "some module_name"
+      })
+      |> SessionTracker.Sessions.create_page_view()
+
+    page_view
+  end
 end
