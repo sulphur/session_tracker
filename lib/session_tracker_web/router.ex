@@ -8,6 +8,7 @@ defmodule SessionTrackerWeb.Router do
     plug :put_root_layout, {SessionTrackerWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug SessionTrackerWeb.Plugs.Session
   end
 
   pipeline :api do
