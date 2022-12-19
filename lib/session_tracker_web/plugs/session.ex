@@ -43,7 +43,10 @@ defmodule SessionTrackerWeb.Plugs.Session do
     conn
     |> Plug.Conn.get_req_header("user-agent")
     |> List.first()
-    |> Browser.full_browser_name()
+    |> case do
+      nil -> "unknown"
+      header -> Browser.full_browser_name(header)
+    end
   end
 
 end

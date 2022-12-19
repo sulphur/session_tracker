@@ -8,7 +8,8 @@ defmodule SessionTracker.Sessions.PageView do
     field :additional_identity_information, :map
     field :engagement_time, :integer
     field :module_name, :string
-    field :session_id, :binary_id
+
+    belongs_to :session, SessionTracker.Session
 
     timestamps()
   end
@@ -16,7 +17,7 @@ defmodule SessionTracker.Sessions.PageView do
   @doc false
   def changeset(page_view, attrs) do
     page_view
-    |> cast(attrs, [:module_name, :additional_identity_information, :engagement_time])
-    |> validate_required([:module_name, :additional_identity_information, :engagement_time])
+    |> cast(attrs, [:module_name, :additional_identity_information, :engagement_time, :session_id])
+    |> validate_required([:module_name, :additional_identity_information, :engagement_time, :session_id])
   end
 end
