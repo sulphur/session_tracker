@@ -9,24 +9,33 @@ defmodule SessionTrackerWeb.Plugs.Session do
   end
 
   defp assign_session(conn) do
-    case conn.req_cookies() do
-      %{@cookie_name => cookie_val} ->
-        :ok
-        conn
-      _ ->
-        new_cookie_uuid = Ecto.UUID.generate()
-        user_agent = get_user_agent_name(conn)
+    {:ok, session} = find_or_create_session(conn, conn.req_cookies())
 
-        {:ok, session} =
-          Sessions.create_tracking_session(%{
-            cookie_uuid: new_cookie_uuid,
-            browser_agent: user_agent
-          })
+    conn
+    |> put_resp_cookie(@cookie_name, session.cookie_uuid, max_age: 30*24*60*60, signed: true)
+    |> assign(:current_session, session)
+    |> assign(:current_session_id, session.id)
+  end
 
-        conn
-        |> put_resp_cookie(@cookie_name, new_cookie_uuid, max_age: 30*24*60*60, signed: true)
-        |> assign(:current_session, session)
+  defp find_or_create_session(conn, %{@cookie_name => cookie_val}) do
+    case Sessions.get_tracking_session_by_cookie_uuid(cookie_val) do
+      nil ->
+        create_session(conn)
+      session ->
+        {:ok, session}
     end
+  end
+  defp find_or_create_session(conn, _), do: create_session(conn)
+
+  defp create_session(conn) do
+    new_cookie_uuid = Ecto.UUID.generate()
+    user_agent = get_user_agent_name(conn)
+
+    {:ok, session} =
+      Sessions.create_tracking_session(%{
+        cookie_uuid: new_cookie_uuid,
+        browser_agent: user_agent
+      })
   end
 
   defp get_user_agent_name(conn) do
@@ -35,4 +44,5 @@ defmodule SessionTrackerWeb.Plugs.Session do
     |> List.first()
     |> Browser.full_browser_name()
   end
+
 end

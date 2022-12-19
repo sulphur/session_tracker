@@ -37,6 +37,10 @@ defmodule SessionTracker.Sessions do
   """
   def get_tracking_session!(id), do: Repo.get!(TrackingSession, id)
 
+  def get_tracking_session_by_cookie_uuid(uuid) do
+    Repo.get_by(TrackingSession, cookie_uuid: uuid)
+  end
+
   @doc """
   Creates a tracking_session.
 

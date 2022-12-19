@@ -26,7 +26,6 @@ defmodule SessionTrackerWeb.Router do
     live "/page_c", PageCLive.Index, :index
     live "/page_c/:tab", PageCLive.Show, :show
 
-
   end
 
   # Other scopes may use custom stacks.
