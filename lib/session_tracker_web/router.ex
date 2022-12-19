@@ -18,6 +18,22 @@ defmodule SessionTrackerWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+
+    live "/page_a", PageALive.Index, :index
+    live "/page_b", PageBLive.Index, :index
+    live "/page_c", PageCLive.Index, :index
+    live "/page_c/:tab", PageCLive.Show, :show
+
+
+    resources "/pages_as", PageAController
+
+    live "/posts", PostLive.Index, :index
+    live "/posts/new", PostLive.Index, :new
+    live "/posts/:id/edit", PostLive.Index, :edit
+
+    live "/posts/:id", PostLive.Show, :show
+    live "/posts/:id/show/edit", PostLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.

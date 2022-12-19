@@ -1,0 +1,13 @@
+<.header>
+  Page C
+</.header>
+
+<div class="p-4 border-2 rounded-tr-xl">
+  <.link class="p-4 hover:text-green-600 text-xl" patch={~p"/page_c/tab_1"}>Tab1</.link>
+  <.link class="p-4 hover:text-green-600 text-xl" patch={~p"/page_c/tab_2"}>Tab2</.link>
+</div>
+<div class="p-4">
+  <.live_component module={@current_tab_module} id="current_tab"/>
+</div>
+
+
